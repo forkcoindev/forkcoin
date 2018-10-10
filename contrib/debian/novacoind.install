@@ -1,0 +1,2 @@
+debian/bin/ForkCoind usr/bin
+src/ForkCoind usr/lib/ForkCoin

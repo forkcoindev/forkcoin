@@ -1,0 +1,5 @@
+ForkCoin-qt usr/bin
+share/pixmaps/ForkCoin32.xpm usr/share/pixmaps
+share/pixmaps/ForkCoin80.xpm usr/share/pixmaps
+debian/ForkCoin-qt.desktop usr/share/applications
+debian/ForkCoin-qt.protocol usr/share/kde4/services/

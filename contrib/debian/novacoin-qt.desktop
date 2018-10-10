@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=ForkCoin
+Comment=ForkCoin P2P Cryptocurrency
+Comment[ru]=ForkCoin, P2P криптовалюта
+Comment[fr]=ForkCoin, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=ForkCoin, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/ForkCoin-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/ForkCoin80.xpm
+MimeType=x-scheme-handler/ForkCoin;
+Categories=Office;

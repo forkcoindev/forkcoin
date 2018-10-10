@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# PROVIDE: ForkCoin
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# ForkCoin_enable (bool): Set to NO by default. Set this variable to YES if you want to enable ForkCoin service.
+# ForkCoin_config (path): Set to /usr/local/etc/ForkCoin.conf by default.
+# ForkCoin_user:  The user account ForkCoin daemon runs as. It uses 'root' user by default.
+# ForkCoin_group: The group account ForkCoin daemon runs as. It uses 'wheel' group by default.
+# ForkCoin_datadir (str): Default to "/var/db/ForkCoin". Base data directory.
+
+. /etc/rc.subr
+
+name=ForkCoin
+rcvar=ForkCoin_enable
+
+: ${ForkCoin_enable:=NO}
+: ${ForkCoin_config=/usr/local/etc/ForkCoin.conf}
+: ${ForkCoin_datadir=/var/db/ForkCoin}
+: ${ForkCoin_user="root"}
+: ${ForkCoin_group="wheel"}
+
+required_files=${ForkCoin_config}
+command=/usr/local/bin/ForkCoind
+ForkCoin_chdir=${ForkCoin_datadir}
+pidfile="${ForkCoin_datadir}/ForkCoind.pid"
+stop_cmd=ForkCoin_stop
+command_args="-conf=${ForkCoin_config} -datadir=${ForkCoin_datadir} -daemon -pid=${pidfile}"
+start_precmd="${name}_prestart"
+
+ForkCoin_create_datadir()
+{
+	echo "Creating data directory"
+	eval mkdir -p ${ForkCoin_datadir}
+	[ $? -eq 0 ] && chown -R ${ForkCoin_user}:${ForkCoin_group} ${ForkCoin_datadir}
+}
+
+ForkCoin_prestart()
+{
+	if [ ! -d "${ForkCoin_datadir}/." ]; then
+		ForkCoin_create_datadir || return 1
+	fi
+}
+
+ForkCoin_requirepidfile()
+{
+	if [ ! "0`check_pidfile ${pidfile} ${command}`" -gt 1 ]; then
+		echo "${name} not running? (check $pidfile)."
+		exit 1
+	fi
+}
+
+ForkCoin_stop()
+{
+    ForkCoin_requirepidfile
+
+	echo "Stopping ${name}."
+	eval ${command} -conf=${ForkCoin_config} -datadir=${ForkCoin_datadir} stop
+	wait_for_pids ${rc_pid}
+}
+
+load_rc_config $name
+run_rc_command "$1"

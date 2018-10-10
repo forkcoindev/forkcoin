@@ -1,0 +1,11 @@
+[Unit]
+Description=ForkCoin daemon serivce
+After=network.target
+
+[Service]
+Type=simple
+User=ForkCoin
+ExecStart=/opt/ForkCoin/ForkCoind
+
+[Install]
+WantedBy=multi-user.target
